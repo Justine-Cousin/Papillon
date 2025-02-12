@@ -9,15 +9,13 @@ interface Parent {
 }
 
 export default function ParentPortal() {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
   const [parent, setParent] = useState<Parent | null>(null);
 
   useEffect(() => {
-    // Fetch parent data here
-    fetch(`/api/parents/${id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/users/${id}`)
       .then((response) => response.json())
-      .then((data) => setParent(data))
-      .catch((error) => console.error("Error fetching parent data:", error));
+      .then((data) => setParent(data));
   }, [id]);
 
   return (
