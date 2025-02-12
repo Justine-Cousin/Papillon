@@ -1,0 +1,8 @@
+.authpage-title {
+  text-align: center;
+  justify-content: center;
+  font-family: var(--font-title-parent);
+  color: var(--parent-primary);
+  line-height: 1.3;
+  padding: 20px;
+}
