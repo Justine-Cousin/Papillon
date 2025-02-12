@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import PlanningChild from "../components/PlanningChild";
+import TaskList from "../components/TaskList";
 import "../styles/ParentPortal.css";
 
 interface Parent {
@@ -8,33 +10,139 @@ interface Parent {
   email: string;
 }
 
+interface Child {
+  id: number;
+  name: string;
+  parent_id: number;
+}
+
+interface Task {
+  id: number;
+  name: string;
+  description: string;
+  completed: boolean;
+}
+
+interface Appointment {
+  id: number;
+  title: string;
+  date: string;
+  date_time: string;
+}
+
 export default function ParentPortal() {
   const { id } = useParams();
   const [parent, setParent] = useState<Parent | null>(null);
+  const [children, setChildren] = useState<Child[]>([]);
+  const [childTasks, setChildTasks] = useState<{ [key: number]: Task[] }>({});
+  const [childAppointments, setChildAppointments] = useState<{
+    [key: number]: Appointment[];
+  }>({});
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/users/${id}`)
       .then((response) => response.json())
       .then((data) => setParent(data));
+
+    fetch(`${import.meta.env.VITE_API_URL}/api/users/${id}/children`)
+      .then((response) => response.json())
+      .then((data) => {
+        setChildren(data);
+
+        for (const child of data) {
+          fetchChildTasks(child.id);
+          fetchChildAppointments(child.id);
+        }
+      });
   }, [id]);
+
+  const fetchChildTasks = (childId: number) => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/children/${childId}/tasks`)
+      .then((response) => response.json())
+      .then((data) => {
+        setChildTasks((prev) => ({
+          ...prev,
+          [childId]: data,
+        }));
+      });
+  };
+
+  const fetchChildAppointments = (childId: number) => {
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/children/${childId}/appointments`,
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const formattedAppointments = data.map((apt: Appointment) => ({
+          ...apt,
+          date: apt.date_time,
+        }));
+        setChildAppointments((prev) => ({
+          ...prev,
+          [childId]: formattedAppointments,
+        }));
+      });
+  };
+
+  const handleTaskToggle = async (childId: number, taskId: number) => {
+    const task = childTasks[childId]?.find((t) => t.id === taskId);
+    if (!task) return;
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/tasks/${taskId}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ completed: !task.completed }),
+        },
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(
+          `HTTP error! status: ${response.status}, message: ${errorText}`,
+        );
+      }
+
+      fetchChildTasks(childId);
+    } catch (error) {
+      console.error("Error updating task status:", error);
+    }
+  };
 
   return (
     <div className="parent-portal-container">
       <h1 className="parent-portal-title">Bonjour, {parent?.name}</h1>
 
-      <div className="parent-portal-child-board">
-        <h2 className="parent-portal-child-board-title">Tableau de bord de</h2>
-        <div className="parent-portal-child-board-info">
-          <div className="parent-portal-child-planning">
-            <h3>Planning</h3>
-          </div>
-          <div className="task-section">
-            <div className="parent-portal-child-board-info-item">
-              <h3>Messages</h3>
-              <p>2</p>
+      <div className="parent-portal-child-boards">
+        {children.map((child) => (
+          <div key={child.id} className="parent-portal-child-board">
+            <h2 className="parent-portal-child-board-title">
+              Tableau de bord de {child.name}
+            </h2>
+            <div className="parent-portal-child-board-info">
+              <div className="parent-portal-child-planning">
+                <h3>Planning</h3>
+                {childAppointments[child.id] && (
+                  <PlanningChild appointments={childAppointments[child.id]} />
+                )}
+              </div>
+              <div className="task-section">
+                {childTasks[child.id] && (
+                  <TaskList
+                    tasks={childTasks[child.id]}
+                    onTaskToggle={(taskId) =>
+                      handleTaskToggle(child.id, taskId)
+                    }
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        ))}
       </div>
       <button type="button" className="parent-portal-add-button">
         +

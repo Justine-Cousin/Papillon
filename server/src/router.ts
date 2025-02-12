@@ -1,5 +1,8 @@
 import express from "express";
 
+import appointmentActions from "./modules/appointment/appointmentActions";
+import childActions from "./modules/child/childActions";
+import taskActions from "./modules/task/taskActions";
 import userActions from "./modules/user/userActions";
 
 const router = express.Router();
@@ -11,6 +14,14 @@ const router = express.Router();
 // Define item-related routes
 router.get("/api/users/:id", userActions.read);
 
-/* ************************************************************************* */
+router.get("/api/users/:id/children", childActions.readByParentId);
+router.get("/api/children/:id", childActions.read);
+router.get("/api/children/:childId/tasks", taskActions.getTasksByChildId);
+router.get(
+  "/api/children/:childId/appointments",
+  appointmentActions.getAppointmentByChildId,
+);
+
+router.put("/api/tasks/:taskId/status", taskActions.updateTaskStatus); // Changement de :id en :taskId/* ************************************************************************* */
 
 export default router;

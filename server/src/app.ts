@@ -1,7 +1,8 @@
 // Load the express module to create a web application
 
 import express from "express";
-
+// Import the API router
+import router from "./router";
 const app = express();
 
 // Configure it
@@ -59,10 +60,8 @@ app.use(
 
 /* ************************************************************************* */
 
-// Import the API router
-import router from "./router";
-
 // Mount the API router under the "/api" endpoint
+app.use(express.json());
 app.use(router);
 
 /* ************************************************************************* */
