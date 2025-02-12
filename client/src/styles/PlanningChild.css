@@ -1,0 +1,107 @@
+.planning-container {
+  padding: 0 1.5rem 1.5rem;
+}
+
+.planning-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.planning-item {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem;
+  border-radius: 16px;
+  background: linear-gradient(to right, rgba(132, 176, 130, 0.05), transparent);
+  border: 1px solid rgba(132, 176, 130, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.planning-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: var(--parent-primary);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.planning-item:hover {
+  transform: translateX(8px);
+  background: linear-gradient(to right, rgba(132, 176, 130, 0.08), transparent);
+  box-shadow: 0 4px 20px rgba(132, 176, 130, 0.1);
+}
+
+.planning-item:hover::before {
+  transform: scaleY(1);
+}
+
+.appointment-time {
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+  border-right: 2px solid rgba(132, 176, 130, 0.2);
+  padding-right: 1.5rem;
+  margin-right: 1.5rem;
+}
+
+.appoitmen-date {
+  font-family: var(--font-title-parent);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--parent-primary);
+  text-transform: capitalize;
+  margin-bottom: 0.25rem;
+}
+
+.appointment-hour {
+  font-size: 1rem;
+  color: var(--parent-text-secondary);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.appointment-hour::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--parent-secondary);
+  border-radius: 50%;
+}
+
+.appointment-description {
+  flex-grow: 1;
+}
+
+.appointment-description p {
+  font-size: 1.1rem;
+  color: var(--text-default);
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* État vide */
+.planning-empty {
+  padding: 3rem 2rem;
+  text-align: center;
+  background: linear-gradient(45deg, rgba(132, 176, 130, 0.05), transparent);
+  border-radius: 16px;
+  border: 2px dashed rgba(132, 176, 130, 0.2);
+}
+
+.planning-empty p {
+  color: var(--parent-text-secondary);
+  font-size: 1.1rem;
+  font-style: italic;
+  margin: 0;
+}
