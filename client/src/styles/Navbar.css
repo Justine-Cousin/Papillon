@@ -1,80 +1,57 @@
 .navbar {
-  background-color: white;
-  padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
 }
 
 .navbar-links {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: row;
+  gap: 12px;
 }
 
 .navbar-link,
 .navbar-home,
 .nav-auth-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
+  justify-content: center;
   text-decoration: none;
-  color: var(--text-default);
-  font-family: var(--font-text);
-  font-size: 0.8rem;
-  padding: 0.5rem;
-  background-color: white;
+  transition: all 0.2s ease;
 }
 
 .navbar-icon {
-  width: 24px;
-  height: 24px;
-  background-color: white;
+  width: 18px;
+  height: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 0.2s ease;
 }
 
-/* État actif */
-.navbar-link.active .navbar-icon {
-  color: var(--parent-primary);
+/* États actifs et hover */
+.navbar-link.active,
+.navbar-link:hover,
+.navbar-home:hover,
+.nav-auth-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
-.navbar-link.active {
-  color: var(--parent-primary);
+.navbar-link.active .navbar-icon,
+.navbar-link:hover .navbar-icon,
+.navbar-home:hover .navbar-icon,
+.nav-auth-button:hover .navbar-icon {
+  color: white;
 }
 
-/* Styles spécifiques pour mobile */
+/* Media Queries */
 @media (max-width: 768px) {
   .navbar {
-    padding: 0;
-  }
-
-  .navbar-links {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: white;
-    padding: 0.5rem;
-    display: flex;
-    justify-content: space-around;
-    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Couleurs spécifiques pour chaque icône */
-  .navbar-home .navbar-icon {
-    color: #ff9f8c; /* Rose/rouge pour accueil */
-  }
-
-  .navbar-link:nth-child(2) .navbar-icon {
-    color: #6b9ac4; /* Bleu pour espace enfants */
-  }
-
-  .navbar-link:nth-child(3) .navbar-icon {
-    color: #84b082; /* Vert pour espace parents */
-  }
-
-  .nav-auth-button .navbar-icon {
-    color: #6b9ac4; /* Bleu pour connexion */
+    bottom: 16px;
+    right: 16px;
   }
 }

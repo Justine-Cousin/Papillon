@@ -8,6 +8,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 // Import the main app component
 import App from "./App";
 import AuthPage from "./pages/AuthPage ";
+import ChildPortal from "./pages/ChildPortal";
 import Home from "./pages/Home";
 import ParentPortal from "./pages/ParentPortal";
 
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/parents/:id",
         element: <ParentPortal />,
+      },
+      {
+        path: "/children/:id",
+        element: <ChildPortal />,
       },
       // Try adding a new route! For example, "/about" with an About component
     ],

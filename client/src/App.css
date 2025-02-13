@@ -6,37 +6,42 @@
 
 body,
 html {
-  background-color: var(--bg-color);
   min-height: 100vh;
-  font-family: "Lato", sans-serif;
+  font-family: var(--font-text);
   font-size: 16px;
   line-height: 1.7;
-  color: #333333;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
   margin: 0;
 }
 
 :root {
-  /* Global */
-  --bg-color: #f0f5ff;
-  --text-default: #2c3e50;
+  /* New color palette */
+  --blue-primary: #89bee1;
+  --orange-primary: #ea9255;
+  --yellow-accent: #e8b15d;
+  --green-dark: #24604c;
+  --white: #ffffff;
+
+  /* Background colors */
+  --bg-light: #e5e9de;
+
+  /* Text colors */
+  --text-dark: #0c1216;
+  --text-light: #f9f8f6;
+  --text-accent: #f3bb62;
 
   /* Fonts */
-  --font-title-parent: "Poppins", sans-serif;
-  --font-title-child: "Quicksand", sans-serif;
-  --font-text: "Open Sans", sans-serif;
+  --font-title: "Fredoka One", cursive;
+  --font-text: "Inter", sans-serif;
 
-  /* Parent interface */
-  --parent-primary: #5b8c69;
-  --parent-secondary: #9b6b9d;
-  --parent-gradient-start: #84b082;
-  --parent-gradient-end: #b082b2;
-  --parent-text-secondary: #5b8c69;
-  --parent-card-bg: rgba(255, 255, 255, 0.95);
-  --parent-shadow: rgba(132, 176, 130, 0.2);
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
 
-  /* Children interface */
-  --child-primary: #ff9f8c;
-  --child-secondary: #6b9ac4;
-  --child-text-secondary: #6b9ac4;
-  --child-text-btn: white;
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(12, 18, 22, 0.05);
+  --shadow-md: 0 4px 6px rgba(12, 18, 22, 0.1);
+  --shadow-lg: 0 8px 16px rgba(12, 18, 22, 0.15);
 }

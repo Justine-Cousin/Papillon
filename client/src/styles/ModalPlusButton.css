@@ -1,0 +1,113 @@
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  padding: 32px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+/* Close Button */
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.modal-close:hover {
+  opacity: 0.8;
+}
+
+/* Modal Buttons */
+.modal-buttons,
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-buttons button,
+.back-button,
+.add-form button {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-family: var(--font-title);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.modal-buttons button:hover,
+.back-button:hover,
+.add-form button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Timer Wrapper */
+.timer-wrapper,
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.add-form h2 {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  color: white;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.back-button {
+  margin-top: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    padding: 24px;
+  }
+
+  .modal-buttons button,
+  .back-button,
+  .add-form button {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+  }
+
+  .modal-close {
+    top: 12px;
+    right: 12px;
+  }
+}

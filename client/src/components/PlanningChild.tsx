@@ -1,4 +1,4 @@
-import "../styles/PlanningChild.css";
+import "../styles/styleCompoParent.css";
 
 interface Appointment {
   id: number;

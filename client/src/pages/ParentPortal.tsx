@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import ModalPlusButton from "../components/ModalPlusButton";
 import PlanningChild from "../components/PlanningChild";
 import TaskList from "../components/TaskList";
 import "../styles/ParentPortal.css";
@@ -38,6 +39,8 @@ export default function ParentPortal() {
   const [childAppointments, setChildAppointments] = useState<{
     [key: number]: Appointment[];
   }>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedChildId, setSelectedChildId] = useState<number | null>(null);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/users/${id}`)
@@ -113,13 +116,59 @@ export default function ParentPortal() {
     }
   };
 
+  const handleAddAppointment = (childId: number, appointment: Appointment) => {
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/children/${childId}/appointments`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(appointment),
+      },
+    )
+      .then((response) => response.json())
+      .then(() => fetchChildAppointments(childId))
+      .catch((error) => console.error("Error adding appointment:", error));
+
+    setIsModalOpen(false);
+  };
+
+  const handleAddTask = async (childId: number, task: Task) => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/children/${childId}/tasks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(task),
+    })
+      .then((response) => response.json())
+      .then(() => fetchChildTasks(childId))
+      .catch((error) => console.error("Error adding task:", error));
+
+    setIsModalOpen(false);
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="parent-portal-container">
       <h1 className="parent-portal-title">Bonjour, {parent?.name}</h1>
+      <p className="parent-portal-instruction">
+        Cliquez sur le tableau de bord d'un enfant pour le sélectionner
+      </p>
 
       <div className="parent-portal-child-boards">
-        {children.map((child) => (
-          <div key={child.id} className="parent-portal-child-board">
+        {children.map((child: Child) => (
+          <div
+            key={child.id}
+            className={`parent-portal-child-board ${selectedChildId === child.id ? "selected" : ""}`}
+            onClick={() => setSelectedChildId(child.id)}
+            onKeyUp={(e) => e.key === "Enter" && setSelectedChildId(child.id)}
+            onKeyDown={(e) => e.key === " " && setSelectedChildId(child.id)}
+          >
             <h2 className="parent-portal-child-board-title">
               Tableau de bord de {child.name}
             </h2>
@@ -134,7 +183,7 @@ export default function ParentPortal() {
                 {childTasks[child.id] && (
                   <TaskList
                     tasks={childTasks[child.id]}
-                    onTaskToggle={(taskId) =>
+                    onTaskToggle={(taskId: number) =>
                       handleTaskToggle(child.id, taskId)
                     }
                   />
@@ -144,9 +193,26 @@ export default function ParentPortal() {
           </div>
         ))}
       </div>
-      <button type="button" className="parent-portal-add-button">
+      <button
+        type="button"
+        className="parent-portal-add-button"
+        onClick={handleOpenModal}
+        disabled={!selectedChildId}
+      >
         +
       </button>
+      <ModalPlusButton
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddAppointment={(appointment: Appointment) =>
+          selectedChildId
+            ? handleAddAppointment(selectedChildId, appointment)
+            : null
+        }
+        onAddTask={(task: Task) =>
+          selectedChildId ? handleAddTask(selectedChildId, task) : null
+        }
+      />
     </div>
   );
 }

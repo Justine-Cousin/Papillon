@@ -23,5 +23,5 @@
 }
 
 .input-error {
-  border: 1px solid var(--child-primary) !important;
+  border-color: rgba(255, 100, 100, 0.5);
 }
