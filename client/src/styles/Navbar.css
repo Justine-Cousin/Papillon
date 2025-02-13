@@ -24,6 +24,9 @@
   justify-content: center;
   text-decoration: none;
   transition: all 0.2s ease;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 .navbar-icon {

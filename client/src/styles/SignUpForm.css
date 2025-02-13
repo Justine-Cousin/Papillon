@@ -57,6 +57,7 @@
   padding: 16px;
   font-size: 1rem;
   transition: all 0.3s ease;
+  outline: none;
 }
 
 .signup-input::placeholder {
@@ -82,6 +83,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 24px;
+  outline: none;
 }
 
 .signup-button:hover {

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SuccessModal from "./SucesModal";
 import "../styles/SignUpForm.css";
 import "../styles/FormValidations.css";
 
@@ -17,6 +18,7 @@ interface FormError {
 }
 
 export default function SignUpForm() {
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -142,8 +144,8 @@ export default function SignUpForm() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
-      alert(data.message);
+      await response.json();
+      setShowSuccessModal(true);
       // Optionnel : rediriger l'utilisateur ou vider le formulaire
       setFormData({
         name: "",
@@ -233,6 +235,12 @@ export default function SignUpForm() {
           </button>
         </form>
       </div>
+      <SuccessModal
+        show={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        title="Bienvenue !"
+        message="Votre compte a été créé avec succès"
+      />
     </div>
   );
 }

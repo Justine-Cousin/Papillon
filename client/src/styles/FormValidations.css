@@ -1,27 +1,65 @@
-.error-message {
-  font-size: 12px;
-  color: var(--child-primary);
-  margin-top: 5px;
-  display: flex;
-  align-items: center;
-  background-color: white;
+/* Messages de validation */
+.validation-message {
+  font-family: var(--font-text);
+  font-size: 0.85rem;
+  padding: 12px 16px;
+  margin-top: 8px;
 }
 
-.error-message::before {
-  content: "!";
+/* Message d'erreur */
+.error-message {
+  color: #266e9f;
+}
+
+/* Message de succès */
+.success-message {
+  color: #266e9f;
+}
+
+/* Message d'info */
+.info-message {
+  color: #266e9f;
+}
+
+/* Message d'avertissement */
+.warning-message {
+  color: var(--orange-primary);
+}
+
+/* Style pour les inputs en erreur */
+.input-error {
+  border-color: var(--blue-primary) !important;
+  background-color: rgba(137, 190, 225, 0.1) !important;
+}
+
+.input-error:focus {
+  border-color: var(--blue-primary) !important;
+  background-color: rgba(137, 190, 225, 0.15) !important;
+}
+
+/* Animation d'apparition */
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Style pour l'icône d'erreur */
+.validation-message-icon {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  background-color: var(--child-primary);
-  color: var(--child-text-btn);
-  border-radius: 50%;
   margin-right: 8px;
-  font-size: 12px;
-  font-weight: bold;
+  opacity: 0.9;
 }
 
-.input-error {
-  border-color: rgba(255, 100, 100, 0.5);
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .validation-message {
+    font-size: 0.8rem;
+  }
 }

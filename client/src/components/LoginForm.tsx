@@ -12,6 +12,7 @@ interface FormData {
 interface FormError {
   email: string;
   password: string;
+  general?: string;
 }
 
 export default function LoginForm() {
@@ -55,6 +56,12 @@ export default function LoginForm() {
       [name]: value,
     }));
 
+    setError((prev) => ({
+      ...prev,
+      [name]: "",
+      general: "",
+    }));
+
     if (name === "email") {
       setError((prev: FormError) => ({
         ...prev,
@@ -70,6 +77,17 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const emailError = validateEmail(formData.email);
+    const passwordError = validatePassword(formData.password);
+
+    if (emailError || passwordError) {
+      setError({
+        email: emailError,
+        password: passwordError,
+      });
+      return;
+    }
+
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/auth/login`,
@@ -119,7 +137,12 @@ export default function LoginForm() {
               onChange={handleChange}
               required
             />
-            {error.email && <p className="error-message">{error.email}</p>}
+            {error.email && (
+              <p className="validation-message error-message">
+                <span className="validation-message-icon">⚠️</span>
+                {error.email}
+              </p>
+            )}
           </div>
 
           <div className="login-input-container">

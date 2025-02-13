@@ -1,0 +1,112 @@
+/* SuccessModal.css */
+.success-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: success-modal-fadeIn 0.3s ease-out;
+}
+
+.success-modal-container {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: var(--shadow-lg);
+  animation: success-modal-slideIn 0.3s ease-out;
+  text-align: center;
+}
+
+.success-modal-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  border: 2px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-modal-icon svg {
+  width: 32px;
+  height: 32px;
+  fill: none;
+  stroke: white;
+  stroke-width: 2;
+}
+
+.success-modal-title {
+  color: white;
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  margin-bottom: 16px;
+}
+
+.success-modal-message {
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--font-text);
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+}
+
+.success-modal-button {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 14px 32px;
+  font-size: 1.1rem;
+  font-family: var(--font-title);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.success-modal-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+@keyframes success-modal-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes success-modal-slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .success-modal-container {
+    width: calc(100% - 32px);
+    padding: 24px;
+  }
+
+  .success-modal-title {
+    font-size: 1.5rem;
+  }
+
+  .success-modal-message {
+    font-size: 1rem;
+  }
+}
