@@ -19,7 +19,9 @@ const PlanningChild: React.FC<PlanningChildProps> = ({ appointments }) => {
             <div className="appointment-time">
               <span className="appoitmen-date">
                 {new Date(appointment.date).toLocaleDateString("fr-FR", {
-                  weekday: "long",
+                  weekday: "short",
+                  day: "numeric",
+                  month: "long",
                 })}
               </span>
               <span className="appointment-hour">

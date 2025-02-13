@@ -127,8 +127,12 @@ export default function ParentPortal() {
         body: JSON.stringify(appointment),
       },
     )
-      .then((response) => response.json())
-      .then(() => fetchChildAppointments(childId))
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        fetchChildAppointments(childId);
+      })
       .catch((error) => console.error("Error adding appointment:", error));
 
     setIsModalOpen(false);
@@ -142,8 +146,12 @@ export default function ParentPortal() {
       },
       body: JSON.stringify(task),
     })
-      .then((response) => response.json())
-      .then(() => fetchChildTasks(childId))
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        fetchChildTasks(childId);
+      })
       .catch((error) => console.error("Error adding task:", error));
 
     setIsModalOpen(false);

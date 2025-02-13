@@ -21,7 +21,11 @@ router.get(
   "/api/children/:childId/appointments",
   appointmentActions.getAppointmentByChildId,
 );
-
+router.post(
+  "/api/children/:childId/appointments",
+  appointmentActions.addAppointment,
+);
+router.post("/api/children/:childId/tasks", taskActions.addTask);
 router.put("/api/tasks/:taskId/status", taskActions.updateTaskStatus); // Changement de :id en :taskId/* ************************************************************************* */
 
 export default router;

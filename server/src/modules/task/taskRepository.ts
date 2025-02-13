@@ -42,6 +42,14 @@ class TaskRepository {
       throw error;
     }
   }
+
+  async addTask(childId: number, task: Task) {
+    const { description, completed } = task;
+    const [result] = await databaseClient.query<Result>(
+      "INSERT INTO tasks (child_id, description, completed) VALUES (?, ?, ?)",
+      [childId, description, completed],
+    );
+  }
 }
 
 export default new TaskRepository();

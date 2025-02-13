@@ -39,7 +39,19 @@ const updateTaskStatus: RequestHandler = async (req, res, next) => {
   }
 };
 
+const addTask: RequestHandler = async (req, res, next) => {
+  try {
+    const childId = Number(req.params.childId);
+    const task = req.body;
+    const result = await taskRepository.addTask(childId, task);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getTasksByChildId,
   updateTaskStatus,
+  addTask,
 };

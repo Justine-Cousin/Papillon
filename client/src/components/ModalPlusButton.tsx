@@ -32,28 +32,87 @@ const ModalPlusButton: React.FC<ModalPlusButtonProps> = ({
   const [selectedOption, setSelectedOption] = useState<
     "menu" | "timer" | "addAppointment" | "addTask"
   >("menu");
+  const [appointmentTitle, setAppointmentTitle] = useState("");
+  const [appointmentDate, setAppointmentDate] = useState("");
+  const [taskName, setTaskName] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
 
-  const handleBackToMenu = () => {
-    setSelectedOption("menu");
+  const handleAppointmentSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onAddAppointment({
+      id: 0,
+      title: appointmentTitle,
+      date: appointmentDate,
+      date_time: appointmentDate,
+    });
+    setAppointmentTitle("");
+    setAppointmentDate("");
+    onClose();
+  };
+
+  const handleTaskSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onAddTask({
+      id: 0,
+      name: taskName,
+      description: taskDescription,
+      completed: false,
+    });
+    setTaskName("");
+    setTaskDescription("");
+    onClose();
   };
 
   const renderContent = () => {
     switch (selectedOption) {
       case "menu":
         return (
-          <div className="modal-buttons">
-            <button
-              type="button"
-              onClick={() => setSelectedOption("addAppointment")}
-            >
-              Ajouter un rendez-vous
-            </button>
-            <button type="button" onClick={() => setSelectedOption("addTask")}>
-              Ajouter une tâche
-            </button>
-            <button type="button" onClick={() => setSelectedOption("timer")}>
-              Ouvrir le timer
-            </button>
+          <div className="modal-menu">
+            <div className="modal-section">
+              <h2>Ajouter un rendez-vous</h2>
+              <form onSubmit={handleAppointmentSubmit}>
+                <input
+                  type="text"
+                  placeholder="Titre du rendez-vous"
+                  value={appointmentTitle}
+                  onChange={(e) => setAppointmentTitle(e.target.value)}
+                  required
+                />
+                <input
+                  type="datetime-local"
+                  value={appointmentDate}
+                  onChange={(e) => setAppointmentDate(e.target.value)}
+                  required
+                />
+                <button type="submit">Ajouter le rendez-vous</button>
+              </form>
+            </div>
+
+            <div className="modal-section">
+              <h2>Ajouter une tâche</h2>
+              <form onSubmit={handleTaskSubmit}>
+                <input
+                  type="text"
+                  placeholder="Nom de la tâche"
+                  value={taskName}
+                  onChange={(e) => setTaskName(e.target.value)}
+                  required
+                />
+                <textarea
+                  placeholder="Description de la tâche"
+                  value={taskDescription}
+                  onChange={(e) => setTaskDescription(e.target.value)}
+                  required
+                />
+                <button type="submit">Ajouter la tâche</button>
+              </form>
+            </div>
+
+            <div className="modal-section">
+              <button type="button" onClick={() => setSelectedOption("timer")}>
+                Ouvrir le timer
+              </button>
+            </div>
           </div>
         );
 
@@ -62,61 +121,12 @@ const ModalPlusButton: React.FC<ModalPlusButtonProps> = ({
           <div className="timer-wrapper">
             <button
               type="button"
+              onClick={() => setSelectedOption("menu")}
               className="back-button"
-              onClick={handleBackToMenu}
             >
-              Retour au menu
+              Retour
             </button>
             <Timer />
-          </div>
-        );
-
-      case "addAppointment":
-        return (
-          <div className="add-form">
-            <button
-              type="button"
-              className="back-button"
-              onClick={handleBackToMenu}
-            >
-              Retour au menu
-            </button>
-            <h2>Ajouter un rendez-vous</h2>
-            <button
-              type="button"
-              onClick={() =>
-                onAddAppointment({ id: 0, title: "", date: "", date_time: "" })
-              }
-            >
-              Créer un rendez-vous
-            </button>
-          </div>
-        );
-
-      case "addTask":
-        return (
-          <div className="add-form">
-            <button
-              type="button"
-              className="back-button"
-              onClick={handleBackToMenu}
-            >
-              Retour au menu
-            </button>
-            <h2>Ajouter une tâche</h2>
-            <button
-              type="button"
-              onClick={() =>
-                onAddTask({
-                  id: 0,
-                  name: "",
-                  description: "",
-                  completed: false,
-                })
-              }
-            >
-              Créer une tâche
-            </button>
           </div>
         );
 

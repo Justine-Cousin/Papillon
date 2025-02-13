@@ -12,6 +12,21 @@ const getAppointmentByChildId: RequestHandler = async (req, res, next) => {
   }
 };
 
+const addAppointment: RequestHandler = async (req, res, next) => {
+  try {
+    const childId = Number(req.params.childId);
+    const appointment = req.body;
+    const result = await appointmentRepository.addAppointment(
+      childId,
+      appointment,
+    );
+    res.sendStatus(201);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getAppointmentByChildId,
+  addAppointment,
 };
