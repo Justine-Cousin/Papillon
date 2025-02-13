@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../services/authContext";
 import "../styles/LoginForm.css";
 import "../styles/FormValidations.css";
 
@@ -22,6 +24,8 @@ export default function LoginForm() {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
+  const { setAuth } = useAuth();
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -64,19 +68,35 @@ export default function LoginForm() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        },
+      );
 
-    const emailError: string = validateEmail(formData.email);
-    const passwordError: string = validatePassword(formData.password);
+      const data = await response.json();
 
-    setError({
-      email: emailError,
-      password: passwordError,
-    });
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
 
-    if (!emailError && !passwordError) {
-      // console.log("Tentative de connexion avec:", formData);
+      localStorage.setItem("token", data.token);
+      setAuth(data);
+      navigate(`/parents/${data.user.id}`);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError({ email: "", password: error.message });
+      } else {
+        setError({ email: "", password: "Erreur de connexion" });
+      }
     }
   };
 
