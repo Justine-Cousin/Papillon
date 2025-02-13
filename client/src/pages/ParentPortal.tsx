@@ -178,6 +178,43 @@ export default function ParentPortal() {
     setIsModalOpen(false);
   };
 
+  const addChild = async (child: Child) => {
+    const childWithParent = {
+      ...child,
+      parent_id: Number(id),
+    };
+    fetch(`${import.meta.env.VITE_API_URL}/api/children`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(childWithParent),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setChildren((prev) => [...prev, data]);
+        setChildTasks((prev) => ({
+          ...prev,
+          [data.id]: [],
+        }));
+        setChildAppointments((prev) => ({
+          ...prev,
+          [data.id]: [],
+        }));
+        setChildEmotions((prev) => ({
+          ...prev,
+          [data.id]: { id: 0, child_id: data.id, mood: "" },
+        }));
+      })
+      .catch((error) => console.error("Error adding child:", error));
+    setIsModalOpen(false);
+  };
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -247,11 +284,11 @@ export default function ParentPortal() {
         type="button"
         className="parent-portal-add-button"
         onClick={handleOpenModal}
-        disabled={!selectedChildId}
       >
         +
       </button>
       <ModalPlusButton
+        parentId={Number(id)}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onAddAppointment={(appointment: Appointment) =>
@@ -262,6 +299,7 @@ export default function ParentPortal() {
         onAddTask={(task: Task) =>
           selectedChildId ? handleAddTask(selectedChildId, task) : null
         }
+        onAddChild={addChild}
       />
     </div>
   );

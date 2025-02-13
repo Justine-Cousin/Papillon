@@ -16,10 +16,7 @@ const addAppointment: RequestHandler = async (req, res, next) => {
   try {
     const childId = Number(req.params.childId);
     const appointment = req.body;
-    const result = await appointmentRepository.addAppointment(
-      childId,
-      appointment,
-    );
+    const result = await appointmentRepository.create(childId, appointment);
     res.sendStatus(201);
   } catch (error) {
     next(error);

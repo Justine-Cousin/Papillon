@@ -20,6 +20,7 @@
   width: 90%;
   max-width: 900px;
   max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-close {

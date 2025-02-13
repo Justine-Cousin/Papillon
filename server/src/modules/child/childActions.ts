@@ -32,4 +32,17 @@ const read: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { readByParentId, read };
+const add: RequestHandler = async (req, res, next) => {
+  try {
+    const newChild = {
+      name: req.body.name,
+      parent_id: req.body.parent_id,
+    };
+    const insertId = await childRepository.create(newChild);
+    res.status(201).json({ id: insertId });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { readByParentId, read, add };

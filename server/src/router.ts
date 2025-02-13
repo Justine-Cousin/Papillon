@@ -35,7 +35,7 @@ router.post("/api/children/:childId/tasks", taskActions.addTask);
 router.put("/api/tasks/:taskId/status", taskActions.updateTaskStatus); // Changement de :id en :taskId/* ************************************************************************* */
 
 router.get("/api/children/:childId/emotion", MoodActions.getMoodByChildId);
-
+router.post("/api/children", childActions.add);
 router.get("/api/", authActions.verifyToken);
 
 export default router;

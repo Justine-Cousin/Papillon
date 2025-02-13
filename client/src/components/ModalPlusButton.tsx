@@ -16,19 +16,30 @@ interface Task {
   completed: boolean;
 }
 
+interface Child {
+  id: number;
+  name: string;
+  parent_id: number;
+}
+
 interface ModalPlusButtonProps {
+  parentId: number;
   isOpen: boolean;
   onClose: () => void;
   onAddAppointment: (appointment: Appointment) => void;
   onAddTask: (task: Task) => void;
+  onAddChild: (child: Child) => void;
 }
 
 const ModalPlusButton: React.FC<ModalPlusButtonProps> = ({
+  parentId,
   isOpen,
   onClose,
   onAddAppointment,
   onAddTask,
+  onAddChild,
 }) => {
+  if (!isOpen) return null;
   const [selectedOption, setSelectedOption] = useState<
     "menu" | "timer" | "addAppointment" | "addTask"
   >("menu");
@@ -36,6 +47,7 @@ const ModalPlusButton: React.FC<ModalPlusButtonProps> = ({
   const [appointmentDate, setAppointmentDate] = useState("");
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
+  const [childName, setChildName] = useState("");
 
   const handleAppointmentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,6 +72,17 @@ const ModalPlusButton: React.FC<ModalPlusButtonProps> = ({
     });
     setTaskName("");
     setTaskDescription("");
+    onClose();
+  };
+
+  const handleChildSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onAddChild({
+      id: 0,
+      name: childName,
+      parent_id: parentId, // Replace 0 with the actual parent ID if available
+    });
+    setChildName("");
     onClose();
   };
 
@@ -105,6 +128,20 @@ const ModalPlusButton: React.FC<ModalPlusButtonProps> = ({
                   required
                 />
                 <button type="submit">Ajouter la tâche</button>
+              </form>
+            </div>
+
+            <div className="modal-section">
+              <h2>Un nouveau papillon rejoint le cocon</h2>
+              <form onSubmit={handleChildSubmit}>
+                <input
+                  type="text"
+                  placeholder="Prénom de l'enfant"
+                  value={childName}
+                  onChange={(e) => setChildName(e.target.value)}
+                  required
+                />
+                <button type="submit">Ajouter l'enfant</button>
               </form>
             </div>
 

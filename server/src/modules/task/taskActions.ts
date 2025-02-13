@@ -43,7 +43,7 @@ const addTask: RequestHandler = async (req, res, next) => {
   try {
     const childId = Number(req.params.childId);
     const task = req.body;
-    const result = await taskRepository.addTask(childId, task);
+    const result = await taskRepository.create(childId, task);
     res.status(201).json(result);
   } catch (error) {
     next(error);

@@ -23,6 +23,14 @@ class ChildRepository {
     );
     return rows[0] as Child | undefined;
   }
+
+  async create(newChild: Omit<Child, "id">) {
+    const [result] = await databaseClient.query<Result>(
+      "INSERT INTO children SET ?",
+      [newChild],
+    );
+    return result.insertId;
+  }
 }
 
 export default new ChildRepository();

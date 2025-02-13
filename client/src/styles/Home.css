@@ -2,6 +2,10 @@
   width: 100%;
   min-height: 100vh;
   background-color: #f4bc64;
+  background-image: url("../assets/images/bgMobile.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -9,6 +13,17 @@
   justify-content: center;
   padding: 20px;
   overflow: hidden;
+}
+
+.home-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(244, 188, 100, 0.3); /* Légère superposition orange */
+  z-index: 1;
 }
 
 .title-wrapper {
@@ -19,20 +34,20 @@
 
 .home-logo {
   position: absolute;
-  width: 180px; /* Augmenté de 100px à 180px */
+  width: min(80%, 400px);
   height: auto;
-  right: -40px; /* Ajusté pour la nouvelle taille */
-  top: -40px; /* Ajusté pour la nouvelle taille */
+  right: clamp(-75px, -15%, -80px);
+  top: clamp(5px, -80%, -70px);
   animation: float 6s ease-in-out infinite;
 }
 
 @keyframes float {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translate(40%, -40%);
   }
   50% {
-    transform: translateY(-15px); /* Légèrement augmenté pour la nouvelle taille */
+    transform: translate(40%, calc(-40% - 15px));
   }
 }
 
@@ -94,21 +109,65 @@
 
 /* Media Queries */
 @media (max-width: 768px) {
-  .home-logo {
-    width: 140px; /* Augmenté de 80px à 140px */
-    right: -30px;
-    top: -30px;
-  }
-
   .home-text {
     font-size: 1.1rem;
   }
 }
 
+.home-logo {
+  width: min(60%, 300px); /* Réduit la taille relative sur mobile */
+  transform: translate(35%, -35%); /* Ajuste légèrement la position */
+}
+
+/* Ajustements pour le titre sur mobile */
 @media (max-width: 480px) {
+  .home-title {
+    font-size: clamp(3rem, 12vw, 4.5rem); /* Réduit la taille du titre */
+    margin-bottom: 0.5rem; /* Réduit l'espace sous le titre */
+  }
+
   .home-logo {
-    width: 100px; /* Augmenté de 60px à 100px */
-    right: -20px;
-    top: -20px;
+    width: min(30%, 120px); /* Réduit la taille des papillons */
+    right: clamp(-25px, -10%, -40px); /* Ajuste la position */
+    top: clamp(0px, -60%, -40px);
+  }
+
+  .home-text {
+    font-size: 1rem; /* Texte légèrement plus petit */
+    margin: 1.5rem 0; /* Réduit les marges */
+    padding: 0 15px; /* Réduit le padding */
+    line-height: 1.4; /* Réduit légèrement l'interlignage */
+  }
+
+  .home-button-container {
+    max-width: 250px;
+    margin-top: 1.5rem;
+  }
+
+  .home-connect-link {
+    padding: 12px 24px;
+    font-size: 1.2rem;
+  }
+
+  .content-wrapper {
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .home-title {
+    font-size: clamp(2.5rem, 10vw, 3.5rem);
+  }
+
+  .home-logo {
+    width: min(25%, 100px);
+  }
+}
+
+@media (min-width: 768px) {
+  .home-container {
+    background-image: url("../assets/images/bg.png");
+    background-position: center;
+    background-size: cover;
   }
 }
