@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
   auth: string | null;
@@ -11,6 +11,35 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [auth, setAuth] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/api/auth/verify`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setAuth(data);
+          } else {
+            localStorage.removeItem("token");
+            setAuth(null);
+          }
+        } catch (error) {
+          localStorage.removeItem("token");
+          setAuth(null);
+        }
+      }
+    };
+    checkAuth();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>

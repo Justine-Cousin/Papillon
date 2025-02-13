@@ -90,7 +90,7 @@ export default function LoginForm() {
 
       localStorage.setItem("token", data.token);
       setAuth(data);
-      navigate(`/parents/${data.user.id}`);
+      navigate(`/parents/${data.user.id}`, { replace: true });
     } catch (error) {
       if (error instanceof Error) {
         setError({ email: "", password: error.message });
