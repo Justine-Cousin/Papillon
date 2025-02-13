@@ -14,8 +14,9 @@ const router = express.Router();
 
 // Define item-related routes
 router.get("/api/users/:id", userActions.read);
-
 router.get("/api/users/:id/children", childActions.readByParentId);
+router.post("/api/users", userActions.add);
+
 router.get("/api/children/:id", childActions.read);
 
 router.get(

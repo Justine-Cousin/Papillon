@@ -8,6 +8,14 @@ export interface User {
 }
 
 class UserRepository {
+  async add(name: string, email: string, password_hash: string) {
+    const [result] = await databaseClient.query<Result>(
+      "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+      [name, email, password_hash],
+    );
+    return result.insertId;
+  }
+
   async read(id: number) {
     const [rows] = await databaseClient.query<Rows>(
       "SELECT * FROM users WHERE id = ?",

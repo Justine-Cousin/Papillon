@@ -1,12 +1,12 @@
--- Table users
+-- Table users (modifiée avec password_hash)
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL
 );
 
--- Table children
+-- Table children (inchangée)
 CREATE TABLE children (
     id INT PRIMARY KEY AUTO_INCREMENT,
     parent_id INT NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE children (
     FOREIGN KEY (parent_id) REFERENCES users(id)
 );
 
--- Table tasks
+-- Table tasks (inchangée)
 CREATE TABLE tasks (
     id INT PRIMARY KEY AUTO_INCREMENT,
     child_id INT NOT NULL,
@@ -23,15 +23,15 @@ CREATE TABLE tasks (
     FOREIGN KEY (child_id) REFERENCES children(id)
 );
 
--- Table emotions
+-- Table emotions (modifiée avec ENUM)
 CREATE TABLE emotions (
     id INT PRIMARY KEY AUTO_INCREMENT,
     child_id INT NOT NULL,
-    mood VARCHAR(50) NOT NULL,
+    mood ENUM('malade', 'en colère', 'triste', 'ému', 'jaloux', 'affamé', 'joyeux', 'content', 'fatigué', 'énergique') NOT NULL,
     FOREIGN KEY (child_id) REFERENCES children(id)
 );
 
--- Table appointments
+-- Table appointments (inchangée)
 CREATE TABLE appointments (
     id INT PRIMARY KEY AUTO_INCREMENT,
     child_id INT NOT NULL,
@@ -40,31 +40,36 @@ CREATE TABLE appointments (
     FOREIGN KEY (child_id) REFERENCES children(id)
 );
 
--- Insertions exemple pour users (parents)
-INSERT INTO users (email, password, name) VALUES
+-- Insertions exemple pour users (parents) - avec password_hash au lieu de password
+INSERT INTO users (email, password_hash, name) VALUES
     ('parent1@email.com', '$argon2id$v=19$m=65536,t=3,p=4$salt1234567890123$hashedPassword123456789', 'Magali'),
     ('parent2@email.com', '$argon2id$v=19$m=65536,t=3,p=4$salt1234567890123$hashedPassword123456789', 'Raoul');
 
--- Insertions exemple pour children
+-- Insertions exemple pour children (inchangées)
 INSERT INTO children (parent_id, name) VALUES
     (1, 'Tom'),
     (1, 'Sarah'),
     (2, 'Lucas');
 
--- Insertions exemple pour tasks
+-- Insertions exemple pour tasks (inchangées)
 INSERT INTO tasks (child_id, description) VALUES
     (1, 'Se brosser les dents'),
     (1, 'Faire les devoirs'),
     (2, 'Ranger la chambre'),
     (3, 'Lire 15 minutes');
 
--- Insertions exemple pour emotions
+-- Insertions exemple pour emotions (avec toutes les émotions)
 INSERT INTO emotions (child_id, mood) VALUES
-    (1, 'content'),
-    (2, 'fatigué'),
-    (3, 'énergique');
+    (1, 'joyeux'),
+    (1, 'fatigué'),
+    (2, 'malade'),
+    (2, 'en colère'),
+    (3, 'triste'),
+    (3, 'ému'),
+    (1, 'jaloux'),
+    (2, 'affamé');
 
--- Insertions exemple pour appointments
+-- Insertions exemple pour appointments (inchangées)
 INSERT INTO appointments (child_id, title, date_time) VALUES
     (1, 'RDV Psychologue', '2025-02-15 14:00:00'),
     (2, 'RDV Orthophoniste', '2025-02-16 15:30:00'),

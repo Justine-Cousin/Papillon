@@ -94,24 +94,66 @@ export default function SignUpForm() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const emailError: string = validateEmail(formData.email);
-    const passwordError: string = validatePassword(formData.password);
-    const confirmPasswordError: string = validateConfirmPassword(
+    // Validation de tous les champs y compris le nom
+    const nameError = !formData.name ? "Le nom est requis" : "";
+    const emailError = validateEmail(formData.email);
+    const passwordError = validatePassword(formData.password);
+    const confirmPasswordError = validateConfirmPassword(
       formData.confirmPassword,
     );
 
     setError({
-      name: error.name,
+      name: nameError,
       email: emailError,
       password: passwordError,
       confirmPassword: confirmPasswordError,
     });
 
-    if (!emailError && !passwordError && !confirmPasswordError) {
-      // console.log("Tentative d'inscription avec:", formData);
+    // Vérifier s'il y a des erreurs
+    if (nameError || emailError || passwordError || confirmPasswordError) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/users`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            password_hash: formData.password,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        if (response.status === 400) {
+          const text = await response.text();
+          alert(text);
+          return;
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      alert(data.message);
+      // Optionnel : rediriger l'utilisateur ou vider le formulaire
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      console.error("Erreur lors de la création du compte:", error);
+      alert("Une erreur est survenue, veuillez réessayer");
     }
   };
 
