@@ -31,6 +31,12 @@ interface Appointment {
   date_time: string;
 }
 
+interface Emotion {
+  id: number;
+  child_id: number;
+  mood: string;
+}
+
 export default function ParentPortal() {
   const { id } = useParams();
   const [parent, setParent] = useState<Parent | null>(null);
@@ -38,6 +44,9 @@ export default function ParentPortal() {
   const [childTasks, setChildTasks] = useState<{ [key: number]: Task[] }>({});
   const [childAppointments, setChildAppointments] = useState<{
     [key: number]: Appointment[];
+  }>({});
+  const [childEmotions, setChildEmotions] = useState<{
+    [key: number]: Emotion;
   }>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedChildId, setSelectedChildId] = useState<number | null>(null);
@@ -55,9 +64,21 @@ export default function ParentPortal() {
         for (const child of data) {
           fetchChildTasks(child.id);
           fetchChildAppointments(child.id);
+          fetchChildEmotion(child.id);
         }
       });
   }, [id]);
+
+  const fetchChildEmotion = (childId: number) => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/children/${childId}/emotion`)
+      .then((response) => response.json())
+      .then((data) => {
+        setChildEmotions((prev) => ({
+          ...prev,
+          [childId]: data,
+        }));
+      });
+  };
 
   const fetchChildTasks = (childId: number) => {
     fetch(`${import.meta.env.VITE_API_URL}/api/children/${childId}/tasks`)
@@ -161,6 +182,19 @@ export default function ParentPortal() {
     setIsModalOpen(true);
   };
 
+  const getMoodEmoji = (mood: string) => {
+    switch (mood.toLowerCase()) {
+      case "content":
+        return "😊";
+      case "fatigué":
+        return "😴";
+      case "énergique":
+        return "⚡";
+      default:
+        return "😐";
+    }
+  };
+
   return (
     <div className="parent-portal-container">
       <h1 className="parent-portal-title">Bonjour, {parent?.name}</h1>
@@ -179,6 +213,14 @@ export default function ParentPortal() {
           >
             <h2 className="parent-portal-child-board-title">
               Tableau de bord de {child.name}
+              {childEmotions[child.id] && (
+                <span
+                  className="child-mood"
+                  title={childEmotions[child.id].mood}
+                >
+                  {getMoodEmoji(childEmotions[child.id].mood)}
+                </span>
+              )}
             </h2>
             <div className="parent-portal-child-board-info">
               <div className="parent-portal-child-planning">
