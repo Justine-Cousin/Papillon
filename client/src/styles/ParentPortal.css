@@ -1,3 +1,4 @@
+/* Styles du conteneur principal */
 .parent-portal-container {
   width: 100%;
   min-height: 100vh;
@@ -19,6 +20,7 @@
   font-size: 1rem;
 }
 
+/* Styles des tableaux de bord */
 .parent-portal-child-boards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -54,7 +56,8 @@
   padding-bottom: 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
-  justify-content: space-arround;
+  justify-content: space-between;
+  align-items: center;
   gap: 16px;
 }
 
@@ -62,6 +65,12 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+/* Styles communs Planning et Tasks */
+.planning-container,
+.task-list-container {
+  width: 100%;
 }
 
 .parent-portal-child-planning,
@@ -79,6 +88,223 @@
   margin-bottom: 16px;
 }
 
+/* Styles du Planning */
+.planning-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.planning-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.appointment-time {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
+  padding-right: 10px;
+}
+
+.appointment-date {
+  color: white;
+  font-size: 1.2rem;
+  text-transform: capitalize;
+}
+
+.appointment-hour {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.appointment-description {
+  flex: 1;
+  margin-left: 16px;
+}
+
+.appointment-description p {
+  color: white;
+  margin: 0;
+}
+
+/* Styles des tâches */
+.task-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  gap: 12px;
+  margin-bottom: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.task-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 2px solid white;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.task-item input[type="checkbox"]:checked {
+  background-color: rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.task-item input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  color: white;
+  font-size: 14px;
+  left: 3px;
+  top: -1px;
+}
+
+.task-item.completed span {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.task-item span {
+  color: white;
+  margin: 0;
+}
+
+/* Styles des boutons d'action */
+.task-buttons,
+.appointment-buttons,
+.task-edit-buttons,
+.appointment-edit-buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.task-edit-button,
+.task-delete-button,
+.task-save-button,
+.task-cancel-button,
+.appointment-edit-button,
+.appointment-delete-button,
+.appointment-save-button,
+.appointment-cancel-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover effects */
+.task-edit-button:hover,
+.appointment-edit-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.task-delete-button:hover,
+.appointment-delete-button:hover {
+  background-color: rgba(255, 87, 87, 0.2);
+  transform: translateY(-2px);
+}
+
+.task-save-button:hover,
+.appointment-save-button:hover {
+  background-color: rgba(72, 199, 142, 0.2);
+  transform: translateY(-2px);
+}
+
+.task-cancel-button:hover,
+.appointment-cancel-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Styles des formulaires d'édition */
+.task-edit-form,
+.appointment-edit-form {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  align-items: center;
+  width: 100%;
+}
+
+.task-edit-input,
+.appointment-edit-input {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: white;
+  font-size: 0.9rem;
+  flex: 1;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+/* Styles spécifiques pour l'input datetime */
+.appointment-edit-date {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  width: 100%;
+  min-width: 200px;
+  color: white;
+  color-scheme: dark;
+}
+
+/* Force les styles sur tous les éléments internes de l'input datetime */
+.appointment-edit-date,
+.appointment-edit-date::-webkit-datetime-edit,
+.appointment-edit-date::-webkit-datetime-edit-fields-wrapper,
+.appointment-edit-date::-webkit-datetime-edit-text,
+.appointment-edit-date::-webkit-datetime-edit-month-field,
+.appointment-edit-date::-webkit-datetime-edit-day-field,
+.appointment-edit-date::-webkit-datetime-edit-year-field,
+.appointment-edit-date::-webkit-datetime-edit-hour-field,
+.appointment-edit-date::-webkit-datetime-edit-minute-field {
+  color: white;
+}
+
+/* Style de l'icône du calendrier */
+.appointment-edit-date::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.6;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 4px;
+  border-radius: 4px;
+}
+
+/* Styles focus pour tous les inputs */
+.task-edit-input:focus,
+.appointment-edit-input:focus,
+.appointment-edit-date:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  outline: none;
+}
+
+/* Bouton d'ajout */
 .parent-portal-add-button {
   position: fixed;
   bottom: 100px;
@@ -97,6 +323,7 @@
   backdrop-filter: blur(8px);
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .parent-portal-container {
     padding: 20px 16px 100px;
@@ -113,10 +340,69 @@
     padding: 0 12px;
   }
 
+  .parent-portal-child-board {
+    padding: 16px;
+    width: 100%;
+  }
+
+  .planning-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .appointment-time {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .appointment-description {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .task-buttons,
+  .appointment-buttons {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+
+  .task-edit-form,
+  .appointment-edit-form {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .appointment-edit-date {
+    min-width: auto;
+    width: 100%;
+  }
+
   .parent-portal-add-button {
     width: 50px;
     height: 50px;
     right: 20px;
     bottom: 90px;
+  }
+}
+
+@media (max-width: 380px) {
+  .parent-portal-child-board {
+    padding: 12px;
+  }
+
+  .planning-item,
+  .task-item {
+    padding: 12px;
+  }
+
+  .appointment-date {
+    font-size: 1rem;
+  }
+
+  .appointment-hour {
+    font-size: 1rem;
   }
 }

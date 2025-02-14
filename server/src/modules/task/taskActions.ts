@@ -50,8 +50,45 @@ const addTask: RequestHandler = async (req, res, next) => {
   }
 };
 
+const edit: RequestHandler = async (req, res, next) => {
+  try {
+    const task = {
+      id: Number(req.params.taskId),
+      child_id: Number(req.params.childId),
+      description: req.body.description,
+      completed: req.body.completed,
+    };
+    const affectedRows = await taskRepository.update(task);
+
+    if (affectedRows === 0) {
+      res.status(404).send("Task not found");
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const taskId = Number(req.params.taskId);
+    const affectedRows = await taskRepository.delete(taskId);
+
+    if (affectedRows === 0) {
+      res.status(404).send("Task not found");
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getTasksByChildId,
   updateTaskStatus,
   addTask,
+  edit,
+  destroy,
 };

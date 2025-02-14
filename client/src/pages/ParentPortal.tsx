@@ -159,6 +159,50 @@ export default function ParentPortal() {
     setIsModalOpen(false);
   };
 
+  const editAppointment = (childId: number, appointment: Appointment) => {
+    const appointmentToUpdate = {
+      id: appointment.id,
+      title: appointment.title,
+      date_time: new Date(appointment.date_time).toISOString(),
+    };
+
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/children/${childId}/appointments/${appointment.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(appointmentToUpdate),
+      },
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `HTTP error! status: ${response.status}, message: ${response.statusText}`,
+          );
+        }
+        fetchChildAppointments(childId);
+      })
+      .catch((error) => console.error("Error updating appointment:", error));
+  };
+
+  const deleteAppointment = (childId: number, appointmentId: number) => {
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/children/${childId}/appointments/${appointmentId}`,
+      {
+        method: "DELETE",
+      },
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        fetchChildAppointments(childId);
+      })
+      .catch((error) => console.error("Error deleting appointment:", error));
+  };
+
   const handleAddTask = async (childId: number, task: Task) => {
     fetch(`${import.meta.env.VITE_API_URL}/api/children/${childId}/tasks`, {
       method: "POST",
@@ -176,6 +220,42 @@ export default function ParentPortal() {
       .catch((error) => console.error("Error adding task:", error));
 
     setIsModalOpen(false);
+  };
+
+  const editTask = (childId: number, task: Task) => {
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/children/${childId}/tasks/${task.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      },
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        fetchChildTasks(childId);
+      })
+      .catch((error) => console.error("Error updating task:", error));
+  };
+
+  const deleteTask = (childId: number, taskId: number) => {
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/children/${childId}/tasks/${taskId}`,
+      {
+        method: "DELETE",
+      },
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        fetchChildTasks(childId);
+      })
+      .catch((error) => console.error("Error deleting task:", error));
   };
 
   const addChild = async (child: Child) => {
@@ -263,16 +343,42 @@ export default function ParentPortal() {
               <div className="parent-portal-child-planning">
                 <h3>Planning</h3>
                 {childAppointments[child.id] && (
-                  <PlanningChild appointments={childAppointments[child.id]} />
+                  <PlanningChild
+                    appointments={childAppointments[child.id]}
+                    onAppointmentEdit={(appointmentId, newTitle, newDate) =>
+                      editAppointment(child.id, {
+                        id: appointmentId,
+                        title: newTitle,
+                        date_time: newDate,
+                        date: newDate,
+                      })
+                    }
+                    onAppointmentDelete={(appointmentId) =>
+                      deleteAppointment(child.id, appointmentId)
+                    }
+                  />
                 )}
               </div>
               <div className="task-section">
                 {childTasks[child.id] && (
                   <TaskList
                     tasks={childTasks[child.id]}
-                    onTaskToggle={(taskId: number) =>
+                    onTaskToggle={(taskId) =>
                       handleTaskToggle(child.id, taskId)
                     }
+                    onTaskEdit={(taskId, newDescription) =>
+                      editTask(child.id, {
+                        id: taskId,
+                        name:
+                          childTasks[child.id].find((t) => t.id === taskId)
+                            ?.name || "",
+                        description: newDescription,
+                        completed:
+                          childTasks[child.id].find((t) => t.id === taskId)
+                            ?.completed || false,
+                      })
+                    }
+                    onTaskDelete={(taskId) => deleteTask(child.id, taskId)}
                   />
                 )}
               </div>

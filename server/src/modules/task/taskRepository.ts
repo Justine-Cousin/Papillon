@@ -50,6 +50,22 @@ class TaskRepository {
       [childId, description, completed],
     );
   }
+
+  async update(task: Task) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE tasks SET description = ? WHERE id = ?",
+      [task.description, task.id],
+    );
+    return result.affectedRows;
+  }
+
+  async delete(taskId: number) {
+    const [result] = await databaseClient.query<Result>(
+      "DELETE FROM tasks WHERE id = ?",
+      [taskId],
+    );
+    return result.affectedRows;
+  }
 }
 
 export default new TaskRepository();

@@ -90,6 +90,102 @@
   opacity: 0.7;
 }
 
+/* Styles des boutons d'action */
+.task-buttons,
+.appointment-buttons,
+.task-edit-buttons,
+.appointment-edit-buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.task-edit-button,
+.task-delete-button,
+.task-save-button,
+.task-cancel-button,
+.appointment-edit-button,
+.appointment-delete-button,
+.appointment-save-button,
+.appointment-cancel-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover effects */
+.task-edit-button:hover,
+.appointment-edit-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.task-delete-button:hover,
+.appointment-delete-button:hover {
+  background-color: rgba(255, 87, 87, 0.2);
+  transform: translateY(-2px);
+}
+
+.task-save-button:hover,
+.appointment-save-button:hover {
+  background-color: rgba(72, 199, 142, 0.2);
+  transform: translateY(-2px);
+}
+
+.task-cancel-button:hover,
+.appointment-cancel-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Formulaires d'édition */
+.task-edit-form,
+.appointment-edit-form {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  align-items: center;
+}
+
+.task-edit-input,
+.appointment-edit-input,
+.appointment-edit-date {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: white;
+  font-size: 0.9rem;
+  flex: 1;
+  transition: all 0.2s ease;
+}
+
+.task-edit-input:focus,
+.appointment-edit-input:focus,
+.appointment-edit-date:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  outline: none;
+}
+
+.appointment-edit-date {
+  min-width: 200px;
+}
+
+/* Style spécifique pour l'input datetime-local */
+.appointment-edit-date::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.6;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .planning-item,
   .task-item {
@@ -98,5 +194,26 @@
 
   .appointment-hour {
     font-size: 1.1rem;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .task-edit-form,
+  .appointment-edit-form {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .appointment-edit-date {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .task-buttons,
+  .appointment-buttons,
+  .task-edit-buttons,
+  .appointment-edit-buttons {
+    margin-top: 8px;
   }
 }

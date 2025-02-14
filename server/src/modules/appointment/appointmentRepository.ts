@@ -24,6 +24,34 @@ class AppointmentRepository {
       [childId, title, date_time],
     );
   }
+
+  async update(appointment: Appointment) {
+    try {
+      // Convertir la date ISO en format MySQL datetime
+      const mysqlDateTime = new Date(appointment.date_time)
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ");
+
+      const [result] = await databaseClient.query<Result>(
+        "UPDATE appointments SET title = ?, date_time = ? WHERE id = ?",
+        [appointment.title, mysqlDateTime, appointment.id],
+      );
+
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error in update:", error);
+      throw error;
+    }
+  }
+
+  async delete(appointmentId: number) {
+    const [result] = await databaseClient.query<Result>(
+      "DELETE FROM appointments WHERE id = ?",
+      [appointmentId],
+    );
+    return result.affectedRows;
+  }
 }
 
 export default new AppointmentRepository();
