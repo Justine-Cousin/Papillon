@@ -4,6 +4,7 @@ import type { Result, Rows } from "../../../database/client";
 export interface Task {
   id: number;
   child_id: number;
+  name: string; // Ajout du champ name
   description: string;
   completed: boolean;
 }
@@ -44,11 +45,12 @@ class TaskRepository {
   }
 
   async create(childId: number, task: Task) {
-    const { description, completed } = task;
+    const { name, description, completed } = task;
     const [result] = await databaseClient.query<Result>(
-      "INSERT INTO tasks (child_id, description, completed) VALUES (?, ?, ?)",
-      [childId, description, completed],
+      "INSERT INTO tasks (child_id, name, description, completed) VALUES (?, ?, ?, ?)",
+      [childId, name, description, completed],
     );
+    return result;
   }
 
   async update(task: Task) {

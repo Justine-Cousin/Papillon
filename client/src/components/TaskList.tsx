@@ -11,8 +11,9 @@ interface Task {
 interface TaskListProps {
   tasks: Task[];
   onTaskToggle: (taskId: number) => void;
-  onTaskEdit: (taskId: number, newDescription: string) => void;
+  onTaskEdit: (taskId: number, description: string) => void;
   onTaskDelete: (taskId: number) => void;
+  readOnly?: boolean;
 }
 
 const TaskList: React.FC<TaskListProps> = ({

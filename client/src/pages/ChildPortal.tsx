@@ -1,7 +1,13 @@
-import { CalendarCheck, CheckSquare, Frown, Meh, Smile } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import TaskList from "../components/TaskList";
 import "../styles/ChildPortal.css";
+
+interface Child {
+  id: number;
+  name: string;
+  parent_id: number;
+}
 
 interface Task {
   id: number;
@@ -10,40 +16,52 @@ interface Task {
   completed: boolean;
 }
 
-interface Activity {
-  id: number;
-  name: string;
-  type: string;
-}
-
 interface Mood {
   id: number;
-  type: "happy" | "sad" | "nervous";
-  timestamp: string;
+  child_id: number;
+  mood: string;
 }
 
 const ChildPortal = () => {
-  const { id } = useParams();
-  const [childName, setChildName] = useState("");
+  const { id } = useParams<{ id: string }>();
+  const [child, setChild] = useState<Child | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [selectedMood, setSelectedMood] = useState<Mood["type"] | null>(null);
+  const [_, setCurrentMood] = useState<Mood | null>(null);
+  const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
+
+  const moods = [
+    { name: "joyeux", emoji: "😃" },
+    { name: "content", emoji: "😊" },
+    { name: "triste", emoji: "😢" },
+    { name: "en colère", emoji: "😠" },
+    { name: "fatigué", emoji: "😴" },
+    { name: "malade", emoji: "🤒" },
+    { name: "affamé", emoji: "🤤" },
+    { name: "énergique", emoji: "⚡" },
+    { name: "jaloux", emoji: "😤" },
+    { name: "ému", emoji: "🥺" },
+  ];
 
   useEffect(() => {
-    // Fetch child info
+    // Charger les informations de l'enfant
     fetch(`${import.meta.env.VITE_API_URL}/api/children/${id}`)
       .then((response) => response.json())
-      .then((data) => setChildName(data.name));
+      .then((data) => setChild(data));
 
-    // Fetch tasks
+    // Charger les tâches
     fetch(`${import.meta.env.VITE_API_URL}/api/children/${id}/tasks`)
       .then((response) => response.json())
       .then((data) => setTasks(data));
 
-    // Fetch activities
-    fetch(`${import.meta.env.VITE_API_URL}/api/children/${id}/activities`)
+    // Charger l'humeur actuelle
+    fetch(`${import.meta.env.VITE_API_URL}/api/children/${id}/mood`)
       .then((response) => response.json())
-      .then((data) => setActivities(data));
+      .then((data) => {
+        setCurrentMood(data);
+        if (data.mood) {
+          setSelectedMoods(data.mood.split(","));
+        }
+      });
   }, [id]);
 
   const handleTaskToggle = async (taskId: number) => {
@@ -62,110 +80,99 @@ const ChildPortal = () => {
         },
       );
 
-      if (response.ok) {
-        setTasks(
-          tasks.map((t) =>
-            t.id === taskId ? { ...t, completed: !t.completed } : t,
-          ),
-        );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      // Mettre à jour la liste des tâches localement
+      setTasks(
+        tasks.map((t) =>
+          t.id === taskId ? { ...t, completed: !t.completed } : t,
+        ),
+      );
     } catch (error) {
-      console.error("Error updating task:", error);
+      console.error("Error updating task status:", error);
     }
   };
 
-  const handleMoodSelect = async (mood: Mood["type"]) => {
+  const handleMoodSelection = async (mood: string) => {
+    let newMoods = [...selectedMoods];
+
+    if (selectedMoods.includes(mood)) {
+      newMoods = selectedMoods.filter((m) => m !== mood);
+    } else if (selectedMoods.length < 2) {
+      newMoods = [...selectedMoods, mood];
+    } else {
+      return; // Maximum 2 émotions
+    }
+
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/children/${id}/mood`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/children/${id}/mood`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ mood: newMoods.join(",") }),
         },
-        body: JSON.stringify({ type: mood }),
-      });
-      setSelectedMood(mood);
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const updatedMood = await response.json();
+      setCurrentMood(updatedMood);
+      setSelectedMoods(updatedMood.mood ? updatedMood.mood.split(",") : []);
     } catch (error) {
       console.error("Error updating mood:", error);
+      // Restaurer l'état précédent en cas d'erreur
+      setSelectedMoods([...selectedMoods]);
     }
   };
 
   return (
-    <div className="child-portal-container">
-      {/* Welcome Section */}
-      <div className="child-portal-welcome">
-        <h1>Salut {childName}! 👋</h1>
-      </div>
-
-      {/* Mood Section */}
-      <div className="child-portal-section">
-        <div className="child-portal-section-title">
-          <h2>Comment je me sens ?</h2>
-        </div>
-        <div className="mood-selector">
-          <button
-            type="button"
-            onClick={() => handleMoodSelect("happy")}
-            className={`mood-button ${selectedMood === "happy" ? "selected" : ""}`}
-          >
-            <Smile className="w-12 h-12" />
-          </button>
-          <button
-            type="button"
-            onClick={() => handleMoodSelect("sad")}
-            className={`mood-button ${selectedMood === "sad" ? "selected" : ""}`}
-          >
-            <Frown className="w-12 h-12" />
-          </button>
-          <button
-            type="button"
-            onClick={() => handleMoodSelect("nervous")}
-            className={`mood-button ${selectedMood === "nervous" ? "selected" : ""}`}
-          >
-            <Meh className="w-12 h-12" />
-          </button>
-        </div>
-      </div>
-
-      {/* Tasks Section */}
-      <div className="child-portal-section">
-        <div className="child-portal-section-title">
-          <CheckSquare />
-          <h2>Liste des tâches</h2>
-        </div>
-        <div>
-          {tasks.map((task) => (
-            <div key={task.id} className="task-list-item">
-              <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => handleTaskToggle(task.id)}
-                className="task-list-item-checkbox"
-              />
-              <span className={task.completed ? "task-completed" : ""}>
-                {task.name}
+    <div className="child-portal">
+      <div className="child-portal__content">
+        <h1 className="child-portal__title">
+          Bonjour, {child?.name}
+          <span className="child-portal__moods">
+            {selectedMoods.map((mood) => (
+              <span key={mood} className="child-portal__mood-emoji">
+                {moods.find((m) => m.name === mood)?.emoji}
               </span>
-            </div>
-          ))}
-        </div>
-      </div>
+            ))}
+          </span>
+        </h1>
 
-      {/* Activities Section */}
-      <div className="child-portal-section">
-        <div className="child-portal-section-title">
-          <CalendarCheck />
-          <h2>Activités</h2>
+        <div className="child-portal__mood-section">
+          <h2>Comment vas-tu ?</h2>
+          <div className="child-portal__mood-grid">
+            {moods.map(({ name, emoji }) => (
+              <button
+                type="button"
+                key={name}
+                onClick={() => handleMoodSelection(name)}
+                className={`mood-button ${selectedMoods.includes(name) ? "selected" : ""}`}
+                title={name}
+              >
+                <span className="mood-emoji">{emoji}</span>
+                <span className="mood-name">{name}</span>
+              </button>
+            ))}
+          </div>
         </div>
-        <div>
-          {activities.map((activity) => (
-            <div key={activity.id} className="activities-list-item">
-              <span className="activities-list-item-icon">
-                {activity.type === "coloring" && "🎨"}
-                {activity.type === "meditation" && "🧘‍♂️"}
-                {activity.type === "sport" && "⚽"}
-              </span>
-              <span>{activity.name}</span>
-            </div>
-          ))}
+
+        <div className="child-portal__tasks-section">
+          <h2>Mes tâches</h2>
+          <TaskList
+            tasks={tasks}
+            onTaskToggle={handleTaskToggle}
+            onTaskEdit={() => {}}
+            onTaskDelete={() => {}}
+            readOnly={true}
+          />
         </div>
       </div>
     </div>

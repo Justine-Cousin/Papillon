@@ -55,6 +55,7 @@ const edit: RequestHandler = async (req, res, next) => {
     const task = {
       id: Number(req.params.taskId),
       child_id: Number(req.params.childId),
+      name: req.body.name,
       description: req.body.description,
       completed: req.body.completed,
     };

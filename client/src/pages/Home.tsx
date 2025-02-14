@@ -16,7 +16,7 @@ export default function Home() {
           grandir en douceur, en famille.
         </p>
         <div className="home-button-container">
-          <Link className="home-connect-link" to="/Auth">
+          <Link className="home-connect-link" to="/auth">
             Connexion
           </Link>
         </div>

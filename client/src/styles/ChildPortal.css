@@ -1,0 +1,231 @@
+.child-portal {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  background-image: url("../assets/images/bgMobileChild.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.child-portal::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(245, 245, 245, 0.3);
+  z-index: 1;
+}
+
+.child-portal__content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Style du titre principal */
+.child-portal__title {
+  font-family: var(--font-title);
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+  color: var(--color-dark);
+}
+
+/* Section des émotions - Orange */
+.child-portal__mood-section {
+  position: relative;
+  background-color: var(--orange-primary);
+  border-radius: 24px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.child-portal__mood-section h2 {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.child-portal__mood-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.mood-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.mood-button:hover {
+  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mood-button.selected {
+  background-color: rgba(255, 255, 255, 0.98);
+  border-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.mood-emoji {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.mood-name {
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--color-dark);
+  font-weight: 500;
+}
+
+/* Section des tâches - Bleu */
+.child-portal__tasks-section {
+  position: relative;
+  background-color: var(--blue-primary);
+  border-radius: 24px;
+  padding: 1.5rem;
+}
+
+.child-portal__tasks-section h2 {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+/* Style des tâches */
+.task-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  margin-bottom: 0.8rem;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.task-item:hover {
+  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-item input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 2px solid var(--blue-primary);
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  position: relative;
+}
+
+.task-item input[type="checkbox"]:checked {
+  background-color: var(--blue-primary);
+}
+
+.task-item input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  color: white;
+  font-size: 16px;
+  left: 4px;
+  top: 0px;
+}
+
+.task-item span {
+  color: var(--color-dark);
+  font-size: 1.1rem;
+}
+
+.task-item.completed span {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+/* Media Queries */
+@media (min-width: 768px) {
+  .child-portal {
+    background-image: url("../assets/images/bgChild.png");
+    background-position: center;
+    background-size: cover;
+  }
+}
+
+@media (max-width: 768px) {
+  .child-portal {
+    padding: 1.5rem;
+  }
+
+  .child-portal__title {
+    font-size: 2rem;
+  }
+
+  .child-portal__mood-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 0.8rem;
+  }
+
+  .mood-button {
+    padding: 0.8rem;
+  }
+
+  .mood-emoji {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .child-portal {
+    padding: 1rem;
+  }
+
+  .child-portal__title {
+    font-size: 1.8rem;
+  }
+
+  .child-portal__mood-section,
+  .child-portal__tasks-section {
+    padding: 1rem;
+  }
+
+  .mood-button {
+    padding: 0.6rem;
+  }
+
+  .mood-emoji {
+    font-size: 1.6rem;
+  }
+
+  .task-item {
+    padding: 0.8rem;
+  }
+}

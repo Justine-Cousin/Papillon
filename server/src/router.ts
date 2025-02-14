@@ -20,6 +20,7 @@ router.post("/api/users", userActions.add);
 router.post("/api/auth/login", authActions.login);
 
 router.get("/api/children/:id", childActions.read);
+router.post("/api/children", childActions.add);
 
 router.get(
   "/api/children/:childId/appointments",
@@ -44,8 +45,8 @@ router.put("/api/tasks/:taskId/status", taskActions.updateTaskStatus);
 router.put("/api/children/:childId/tasks/:taskId", taskActions.edit);
 router.delete("/api/children/:childId/tasks/:taskId", taskActions.destroy);
 
-router.get("/api/children/:childId/emotion", MoodActions.getMoodByChildId);
-router.post("/api/children", childActions.add);
+router.get("/api/children/:childId/mood", MoodActions.getMoodByChildId);
+router.put("/api/children/:childId/mood", MoodActions.editMoodByChildId);
 router.get("/api/", authActions.verifyToken);
 
 export default router;

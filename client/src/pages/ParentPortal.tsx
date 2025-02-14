@@ -69,8 +69,19 @@ export default function ParentPortal() {
       });
   }, [id]);
 
+  // Ajout de la mise à jour périodique des émotions
+  useEffect(() => {
+    const interval = setInterval(() => {
+      for (const child of children) {
+        fetchChildEmotion(child.id);
+      }
+    }, 10000); // Mise à jour toutes les 10 secondes
+
+    return () => clearInterval(interval);
+  }, [children]);
+
   const fetchChildEmotion = (childId: number) => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/children/${childId}/emotion`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/children/${childId}/mood`)
       .then((response) => response.json())
       .then((data) => {
         setChildEmotions((prev) => ({
@@ -204,12 +215,18 @@ export default function ParentPortal() {
   };
 
   const handleAddTask = async (childId: number, task: Task) => {
+    const taskData = {
+      name: task.name, // On s'assure d'envoyer le nom
+      description: task.description,
+      completed: false,
+    };
+
     fetch(`${import.meta.env.VITE_API_URL}/api/children/${childId}/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(task),
+      body: JSON.stringify(taskData), // On envoie taskData au lieu de task
     })
       .then((response) => {
         if (!response.ok) {
@@ -300,16 +317,35 @@ export default function ParentPortal() {
   };
 
   const getMoodEmoji = (mood: string) => {
-    switch (mood.toLowerCase()) {
-      case "content":
-        return "😊";
-      case "fatigué":
-        return "😴";
-      case "énergique":
-        return "⚡";
-      default:
-        return "😐";
-    }
+    const moods = mood.split(",");
+    return moods
+      .map((m) => {
+        switch (m.toLowerCase().trim()) {
+          case "malade":
+            return "🤒";
+          case "en colère":
+            return "😠";
+          case "triste":
+            return "😢";
+          case "ému":
+            return "🥺";
+          case "jaloux":
+            return "😤";
+          case "affamé":
+            return "🤤";
+          case "joyeux":
+            return "😃";
+          case "content":
+            return "😊";
+          case "fatigué":
+            return "😴";
+          case "énergique":
+            return "⚡";
+          default:
+            return "😐";
+        }
+      })
+      .join(" ");
   };
 
   return (

@@ -1,7 +1,8 @@
-import { Handshake, Home, LogOut, UserRound, Users } from "lucide-react";
+import { Handshake, Home, LogOut, Users } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../services/authContext";
 import "../styles/Navbar.css";
+import ChildSelector from "../components/ChildSelector";
 
 const Navbar = () => {
   const location = useLocation();
@@ -20,20 +21,16 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-links">
-        {/* Le lien Home est toujours visible */}
         <Link to="/" className="navbar-home">
           <Home className="navbar-icon" />
         </Link>
 
         {auth ? (
-          // Liens visibles uniquement quand l'utilisateur est connecté
           <>
-            <Link
-              to="/children"
-              className={`navbar-link ${location.pathname === "/children" ? "active" : ""}`}
-            >
-              <UserRound className="navbar-icon" />
-            </Link>
+            <ChildSelector
+              isActive={location.pathname.startsWith("/children/")}
+              userId={auth.user.id}
+            />
             <Link
               to={`/parents/${auth.user.id}`}
               className={`navbar-link ${location.pathname.startsWith("/parents/") ? "active" : ""}`}
@@ -49,7 +46,6 @@ const Navbar = () => {
             </button>
           </>
         ) : (
-          // Uniquement le bouton de connexion quand l'utilisateur n'est pas connecté
           <Link to="/auth" className="nav-auth-button">
             <Handshake className="navbar-icon" />
           </Link>

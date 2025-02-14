@@ -100,6 +100,8 @@
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(4px);
   transition: all 0.3s ease;
+  z-index: 10;
+  position: relative;
 }
 
 .home-connect-link:hover {
@@ -142,6 +144,7 @@
   .home-button-container {
     max-width: 250px;
     margin-top: 1.5rem;
+    z-index: 10; /* Place les boutons au-dessus des papillons */
   }
 
   .home-connect-link {
